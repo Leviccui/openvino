@@ -274,20 +274,20 @@ void dump_buffer(memory::ptr mem, std::string const& name) {
 
 void print_info(std::map<primitive_id, primitive_id>& all_primitives, std::map<primitive_id, event::ptr>& executed_primitives)
 {
-        std::cout << std::endl << "Org_primitive_id, Primitive_id_after_optimization" << std::endl;
-        for (auto& p : all_primitives)
-        {
-            std::cout << p.first << ", " << p.second << std::endl;
-        }
+        //std::cout << std::endl << "Org_primitive_id, Primitive_id_after_optimization" << std::endl;
+        //for (auto& p : all_primitives)
+        //{
+        //    std::cout << p.first << ", " << p.second << std::endl;
+        //}
         // Now, we want to check what is the time of execution of each primitive:
-    //std::vector<cldnn::instrumentation::profiling_info> profiling_table;
-    //for (auto& p : executed_primitives)
-    //{
-    //    std::vector<cldnn::instrumentation::profiling_interval> v = p.second->get_profiling_info();
-    //    cldnn::instrumentation::profiling_info info = { p.first, v };
-    //    profiling_table.push_back(info);
-    //}
-    //// We have table of profiling metrics.
+    std::vector<cldnn::instrumentation::profiling_info> profiling_table;
+    for (auto& p : executed_primitives)
+    {
+        std::vector<cldnn::instrumentation::profiling_interval> v = p.second->get_profiling_info();
+        //cldnn::instrumentation::profiling_info info = { p.first, v };
+        //profiling_table.push_back(info);
+    }
+    // We have table of profiling metrics.
 
     //for (auto& p : profiling_table)
     //{
