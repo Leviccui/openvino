@@ -363,7 +363,7 @@ void cldnn_vgg16_test() {
         input_layout("input", input_mem->get_layout()),
         data("weights", weights_mem));
 
-    for (int j = 0; j < 1; j++) {
+    for (int j = 0; j < 10; j++) {
         auto conv = convolution("conv" + std::to_string(j), "input", { "weights" },
             { 1, 1, stride, stride }, { 0, 0, -_padding, -_padding });
         auto rd=reorder("output"+ std::to_string(j), "conv" + std::to_string(j), { data_types::f32,format::bfyx,{ batch_num, output_f, output_y, output_x } });
