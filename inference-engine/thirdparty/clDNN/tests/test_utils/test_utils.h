@@ -45,8 +45,8 @@
 
 namespace tests {
 
-std::shared_ptr<cldnn::engine> create_test_engine(bool enable_profiling = false);
-cldnn::engine& get_test_engine(bool enable_profiling=false);
+std::shared_ptr<cldnn::engine> create_test_engine(bool enable_profiling = true);
+cldnn::engine& get_test_engine(bool enable_profiling=true);
 cldnn::stream& get_test_stream();
 
 #define USE_RANDOM_SEED 0
