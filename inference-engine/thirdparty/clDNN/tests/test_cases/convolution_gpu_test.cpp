@@ -274,60 +274,60 @@ void dump_buffer(memory::ptr mem, std::string const& name) {
 
 void print_info(std::map<primitive_id, primitive_id>& all_primitives, std::map<primitive_id, event::ptr>& executed_primitives)
 {
-        //std::cout << std::endl << "Org_primitive_id, Primitive_id_after_optimization" << std::endl;
-        //for (auto& p : all_primitives)
-        //{
-        //    std::cout << p.first << ", " << p.second << std::endl;
-        //}
-        // Now, we want to check what is the time of execution of each primitive:
-    std::vector<cldnn::instrumentation::profiling_info> profiling_table;
-    for (auto& p : executed_primitives)
-    {
-        std::vector<cldnn::instrumentation::profiling_interval> v = p.second->get_profiling_info();
-        cldnn::instrumentation::profiling_info info = { p.first, v };
-        profiling_table.push_back(info);
-    }
-    // We have table of profiling metrics.
-
-    for (auto& p : profiling_table)
-    {
-        std::cout << p.name << ":" << std::endl;
-        for (auto& q : p.intervals)
+        std::cout << std::endl << "Org_primitive_id, Primitive_id_after_optimization" << std::endl;
+        for (auto& p : all_primitives)
         {
-            std::cout << "\t" << q.name << ": " << std::chrono::duration_cast<std::chrono::duration<double, std::chrono::milliseconds::period>>(q.value->value()).count()
-                << " milliseconds" << std::endl;
+            std::cout << p.first << ", " << p.second << std::endl;
         }
-    }
+        // Now, we want to check what is the time of execution of each primitive:
+    //std::vector<cldnn::instrumentation::profiling_info> profiling_table;
+    //for (auto& p : executed_primitives)
+    //{
+    //    std::vector<cldnn::instrumentation::profiling_interval> v = p.second->get_profiling_info();
+    //    cldnn::instrumentation::profiling_info info = { p.first, v };
+    //    profiling_table.push_back(info);
+    //}
+    //// We have table of profiling metrics.
 
-    double avg_time = 0;
-    int cnt = 0;
-    int discard = 5;
-    for (auto& p : profiling_table)
-    {
-        if (p.name.find("conv", 0) == 0) {
-            for (auto& q : p.intervals) {
-                double t = 0;
-                if (q.name == "executing") {
-                    std::cout << p.name + " " + q.name + " time: "
-                        << (t = std::chrono::duration_cast<std::chrono::duration<double, std::chrono::milliseconds::period>>(q.value->value()).count())
-                        << std::endl;
-                    if (cnt >= discard && cnt < ITER - discard)
-                        avg_time += (double)t;
-                    cnt++;
-                }
-            }
-        }
-    }
+    //for (auto& p : profiling_table)
+    //{
+    //    std::cout << p.name << ":" << std::endl;
+    //    for (auto& q : p.intervals)
+    //    {
+    //        std::cout << "\t" << q.name << ": " << std::chrono::duration_cast<std::chrono::duration<double, std::chrono::milliseconds::period>>(q.value->value()).count()
+    //            << " milliseconds" << std::endl;
+    //    }
+    //}
 
-    //assert(cnt == ITER);
-    cnt -= 2 * discard;
-    printf("Average clDNN Execution time is: %lf milliseconds \n", avg_time / cnt);
-    printf("GFLOPS: %lf\n", FLOPS / (avg_time / cnt) / 1e6);
+    //double avg_time = 0;
+    //int cnt = 0;
+    //int discard = 5;
+    //for (auto& p : profiling_table)
+    //{
+    //    if (p.name.find("conv", 0) == 0) {
+    //        for (auto& q : p.intervals) {
+    //            double t = 0;
+    //            if (q.name == "executing") {
+    //                std::cout << p.name + " " + q.name + " time: "
+    //                    << (t = std::chrono::duration_cast<std::chrono::duration<double, std::chrono::milliseconds::period>>(q.value->value()).count())
+    //                    << std::endl;
+    //                if (cnt >= discard && cnt < ITER - discard)
+    //                    avg_time += (double)t;
+    //                cnt++;
+    //            }
+    //        }
+    //    }
+    //}
+
+    ////assert(cnt == ITER);
+    //cnt -= 2 * discard;
+    //printf("Average clDNN Execution time is: %lf milliseconds \n", avg_time / cnt);
+    //printf("GFLOPS: %lf\n", FLOPS / (avg_time / cnt) / 1e6);
 }
 
 void cldnn_vgg16_test() {
     //#define CHECK_RESULTS
-    auto& engine = get_test_engine(true);
+    auto& engine = get_test_engine();
 
     const int batch_num = B;
     const int output_y = OUTPUT_H_BEFORE_PADDING;
