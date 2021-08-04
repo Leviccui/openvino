@@ -329,7 +329,7 @@ void dump_buffer(memory::ptr mem, std::string const& name) {
 
 void cldnn_vgg16_test() {
     //#define CHECK_RESULTS
-    const auto& engine = get_test_engine(true);
+    auto& engine = get_test_engine(true);
 
     const int batch_num = B;
     const int output_y = OUTPUT_H_BEFORE_PADDING;
