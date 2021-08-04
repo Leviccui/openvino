@@ -276,6 +276,8 @@ void dump_buffer(memory::ptr mem, std::string const& name) {
 void print_info(std::vector<std::pair<std::string, std::vector<primitive_info>>> optimization_steps_info)
 {
     printf("-------------------------------\n");
+    std::cout << optimization_steps_info.size() << std::endl;
+   
     for (auto& p : optimization_steps_info)
     {
         std::cout << p.first << std::endl;
