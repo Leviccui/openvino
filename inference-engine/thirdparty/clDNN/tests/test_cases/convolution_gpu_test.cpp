@@ -382,9 +382,11 @@ void cldnn_vgg16_test() {
     //print_info(all_primitives, executed_primitives);
 
     auto out_mem = network.get_output("conv0").get_memory();
+    auto out_layout = out_mem->get_layout();
     cldnn::mem_lock<float> output_ptr(out_mem, get_test_stream());
 
-    ASSERT_EQ(out_mem->get_layout().format, format::bfyx);
+    EXPECT_EQ(output_layout.format, format::bfyx);
+
 #ifdef CHECK_RESULTS
     // Calculate reference values without bias
     for (auto bi = 0; bi < batch_num; ++bi)
