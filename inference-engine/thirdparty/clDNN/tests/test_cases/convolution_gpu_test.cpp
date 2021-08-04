@@ -367,7 +367,8 @@ void cldnn_vgg16_test() {
 
     for (int j = 0; j < ITER; j++) {
         auto conv = convolution("conv" + std::to_string(j), "input", { "weights" },
-            { 1, 1, stride, stride }, { 0, 0, -_padding, -_padding });
+            { 1, 1, stride, stride }, { 0, 0, -_padding, -_padding })
+        auto rd=reorder("output"+ std::to_string(j), "conv" + std::to_string(j), { data_types::f32,format::bfyx,{ batch_num, output_f, output_y, output_x } });
         topology.add(conv);
     }
 
@@ -381,7 +382,7 @@ void cldnn_vgg16_test() {
     auto all_primitives = network.get_all_primitives();
     //print_info(all_primitives, executed_primitives);
 
-    auto out_mem = network.get_output("conv0").get_memory();
+    auto out_mem = network.get_output("output0").get_memory();
     auto out_layout = out_mem->get_layout();
     cldnn::mem_lock<float> output_ptr(out_mem, get_test_stream());
 
