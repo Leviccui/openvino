@@ -383,7 +383,7 @@ void cldnn_vgg16_test() {
 
     auto out_mem = network.get_output("output0").get_memory();
     auto out_layout = out_mem->get_layout();
-    cldnn::mem_lock<float> output_ptr(out_mem, get_test_stream());
+    cldnn::mem_lock<float> out_ptr(out_mem, get_test_stream());
 
     EXPECT_EQ(out_layout.format, format::bfyx);
 
