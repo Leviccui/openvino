@@ -381,7 +381,7 @@ void cldnn_vgg16_test() {
     //auto all_primitives = network.get_all_primitives();
     //print_info(all_primitives, executed_primitives);
 
-    auto out_mem = network.get_output("output0").get_memory();
+    auto out_mem = network.get_output("conv0").get_memory();
     auto out_layout = out_mem->get_layout();
     cldnn::mem_lock<float> out_ptr(out_mem, get_test_stream());
 
