@@ -31,7 +31,7 @@
 #elif (PARAM==2)
 #include "../../common/conv_cm_params_28_28_512.h"
 #elif (PARAM==3)
-#include "../../common/conv_cm_params_28_28_512.h"
+#include "../../common/conv_cm_params_56_56_128.h"
 #elif (PARAM==4)
 #include "../../common/conv_cm_params_56_56_256.h"
 #elif (PARAM==5)
