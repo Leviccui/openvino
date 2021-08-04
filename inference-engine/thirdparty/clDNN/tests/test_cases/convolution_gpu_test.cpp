@@ -538,6 +538,9 @@ TEST(deformable_convolution_f32_fw_gpu, basic_deformable_convolution_def_group1_
     network.set_input_data("trans", trans);
 
     auto outputs = network.execute();
+    auto executed_primitives = network.get_executed_primitives();
+    auto all_primitives = network.get_all_primitives();
+    print_info(all_primitives, executed_primitives);
     EXPECT_EQ(outputs.size(), size_t(1));
     EXPECT_EQ(outputs.begin()->first, "conv");
 
