@@ -1,0 +1,1 @@
+cmake -E make_directory build && cd build && rm -r *; CXX=/home/u69216/t2s-os/install/gcc-7.5.0/bin/g++ CC=/home/u69216/t2s-os/install/gcc-7.5.0/bin/gcc ~/cmake-3.21.1-linux-x86_64/bin/cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_MYRIAD=0 -DENABLE_TESTS=1 -DENABLE_CLDNN_TESTS=1 ..; cd ..

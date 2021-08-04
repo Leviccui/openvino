@@ -308,6 +308,13 @@ cldnn::engine& get_test_engine() {
     return *test_engine;
 }
 
+const cldnn::engine& get_test_engine_profiling()
+{
+    const bool profiling = true;
+    static const cldnn::engine engine(profiling);
+    return engine;
+}
+
 cldnn::stream& get_test_stream() {
     static std::shared_ptr<cldnn::stream> test_stream = nullptr;
     if (!test_stream)
