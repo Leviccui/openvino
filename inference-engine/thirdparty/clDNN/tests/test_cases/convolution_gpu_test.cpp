@@ -273,158 +273,158 @@ void dump_buffer(memory::ptr mem, std::string const& name) {
 }
 
 //Helper function for printing primitive ids and profiling info
-void print_info(std::map<primitive_id, primitive_id>& all_primitives, std::map<primitive_id, event>& executed_primitives)
-{
-    //#include "../../../common/conv_cm_params.h"
-        //std::cout << std::endl << "Org_primitive_id, Primitive_id_after_optimization" << std::endl;
-        //for (auto& p : all_primitives)
-        //{
-        //    std::cout << p.first << ", " << p.second << std::endl;
-        //}
-        // Now, we want to check what is the time of execution of each primitive:
-    std::vector<cldnn::instrumentation::profiling_info> profiling_table;
-    for (auto& p : executed_primitives)
-    {
-        std::vector<cldnn::instrumentation::profiling_interval> v = p.second.get_profiling_info();
-        cldnn::instrumentation::profiling_info info = { p.first, v };
-        profiling_table.push_back(info);
-    }
-    // We have table of profiling metrics.
-
-    for (auto& p : profiling_table)
-    {
-        std::cout << p.name << ":" << std::endl;
-        for (auto& q : p.intervals)
-        {
-            std::cout << "\t" << q.name << ": " << std::chrono::duration_cast<std::chrono::duration<double, std::chrono::milliseconds::period>>(q.value->value()).count()
-                << " milliseconds" << std::endl;
-        }
-    }
-
-    double avg_time = 0;
-    int cnt = 0;
-    int discard = 5;
-    for (auto& p : profiling_table)
-    {
-        if (p.name.find("conv", 0) == 0) {
-            for (auto& q : p.intervals) {
-                double t = 0;
-                if (q.name == "executing") {
-                    std::cout << p.name + " " + q.name + " time: "
-                        << (t = std::chrono::duration_cast<std::chrono::duration<double, std::chrono::milliseconds::period>>(q.value->value()).count())
-                        << std::endl;
-                    if (cnt >= discard && cnt < ITER - discard)
-                        avg_time += (double)t;
-                    cnt++;
-                }
-            }
-        }
-    }
-
-    //assert(cnt == ITER);
-    cnt -= 2 * discard;
-    printf("Average clDNN Execution time is: %lf milliseconds \n", avg_time / cnt);
-    printf("GFLOPS: %lf\n", FLOPS / (avg_time / cnt) / 1e6);
-}
-
-//void cldnn_vgg16_test() {
-//    //#define CHECK_RESULTS
-//    const auto& engine = get_test_engine(true);
-//
-//    const int batch_num = B;
-//    const int output_y = OUTPUT_H_BEFORE_PADDING;
-//    const int output_x = OUTPUT_W_BEFORE_PADDING;
-//    const int input_f = R_CI;
-//    const int output_f = CO;
-//    assert(R_KW == R_KH);
-//    const int filter_xy = R_KW;
-//    assert(STRIDE_H == STRIDE_W);
-//    const int stride = 1;
-//    assert(PADDING_H == PADDING_W);
-//    const int _padding = PADDING_W;
-//
-//    const int input_y = (output_y - 1) * stride + filter_xy - 2 * _padding;
-//    const int input_x = (output_x - 1) * stride + filter_xy - 2 * _padding;
-//
-//    auto input_size = tensor(batch_num, input_f, input_y, input_x);
-//    auto input_data = generate_random_4d<float>(batch_num, input_f, input_y, input_x, -1, 1);
-//    auto input_data_bfyx = flatten_4d(format::bfyx, input_data);
-//    auto input_mem = memory::allocate(engine, { data_types::f32, format::bfyx, input_size });
-//    set_values(input_mem, input_data_bfyx);
-//
-//    auto weights_size = tensor(output_f, input_f, filter_xy, filter_xy);
-//    auto weights_data = generate_random_4d<float>(output_f, input_f, filter_xy, filter_xy, -1, 1);
-//    auto weights_data_bfyx = flatten_4d(format::bfyx, weights_data);
-//    auto weights_mem = memory::allocate(engine, { data_types::f32, format::bfyx, weights_size });
-//    set_values(weights_mem, weights_data_bfyx);
-//
-//    // Will be used to store reference values calculated in branches depending on bias
-//    auto reference_result = VVVVF<float>(batch_num, VVVF<float>(output_f));
-//
-//    topology topology(
-//        input_layout("input", input_mem.get_layout()),
-//        data("weights", weights_mem));
-//
-//    for (int j = 0; j < ITER; j++) {
-//        auto conv = convolution("conv" + std::to_string(j), "input", { "weights" },
-//            { 1, 1, stride, stride }, { 0, 0, -_padding, -_padding });
-//        topology.add(conv);
-//    }
-//
-//    build_options options;
-//    options.set_option(build_option::optimize_data(true));
-//    network network(engine, topology, options);
-//
-//    network.set_input_data("input", input_mem);
-//
-//    network.execute();
-//    auto executed_primitives = network.get_executed_primitives();
-//    auto all_primitives = network.get_all_primitives();
-//    print_info(all_primitives, executed_primitives);
-//
-//    auto out_mem = network.get_output("conv0").get_memory();
-//    cldnn::mem_lock<float> output_ptr(out_mem, get_test_stream());
-//
-//    ASSERT_EQ(out_mem.get_layout().format, format::bfyx);
-//#ifdef CHECK_RESULTS
-//    // Calculate reference values without bias
-//    for (auto bi = 0; bi < batch_num; ++bi)
+//void print_info(std::map<primitive_id, primitive_id>& all_primitives, std::map<primitive_id, event>& executed_primitives)
+//{
+//    //#include "../../../common/conv_cm_params.h"
+//        //std::cout << std::endl << "Org_primitive_id, Primitive_id_after_optimization" << std::endl;
+//        //for (auto& p : all_primitives)
+//        //{
+//        //    std::cout << p.first << ", " << p.second << std::endl;
+//        //}
+//        // Now, we want to check what is the time of execution of each primitive:
+//    std::vector<cldnn::instrumentation::profiling_info> profiling_table;
+//    for (auto& p : executed_primitives)
 //    {
-//        for (auto ofi = 0; ofi < output_f; ++ofi)
+//        std::vector<cldnn::instrumentation::profiling_interval> v = p.second.get_profiling_info();
+//        cldnn::instrumentation::profiling_info info = { p.first, v };
+//        profiling_table.push_back(info);
+//    }
+//    // We have table of profiling metrics.
+//
+//    for (auto& p : profiling_table)
+//    {
+//        std::cout << p.name << ":" << std::endl;
+//        for (auto& q : p.intervals)
 //        {
-//            reference_result[bi][ofi] = reference_convolve(
-//                input_data[bi], weights_data[ofi],
-//                stride, stride,
-//                0,                                  // bias
-//                1, 1,                               // dilation
-//                _padding, _padding,       // input padding
-//                0, 0);
+//            std::cout << "\t" << q.name << ": " << std::chrono::duration_cast<std::chrono::duration<double, std::chrono::milliseconds::period>>(q.value->value()).count()
+//                << " milliseconds" << std::endl;
 //        }
 //    }
 //
-//    for (int bi = 0; bi < batch_num; ++bi)
-//        for (int fi = 0; fi < output_f; ++fi)
-//            for (int yi = 0; yi < output_y; ++yi)
-//                for (int xi = 0; xi < output_x; ++xi)
-//                {
-//                    auto val_ref = reference_result[bi][fi][yi][xi];
-//                    auto val = out_ptr[bi * output_f * output_y * output_x +
-//                        fi * output_y * output_x +
-//                        yi * output_x +
-//                        xi];
-//                    auto equal = are_equal(val_ref, val, 1e-2f);
-//                    EXPECT_TRUE(equal);
-//                    if (!equal)
-//                    {
-//                        std::cout << "At b = " << bi << ", fi = " << fi << ", xi = " << xi << ", yi = " << yi << std::endl;
-//                    }
+//    double avg_time = 0;
+//    int cnt = 0;
+//    int discard = 5;
+//    for (auto& p : profiling_table)
+//    {
+//        if (p.name.find("conv", 0) == 0) {
+//            for (auto& q : p.intervals) {
+//                double t = 0;
+//                if (q.name == "executing") {
+//                    std::cout << p.name + " " + q.name + " time: "
+//                        << (t = std::chrono::duration_cast<std::chrono::duration<double, std::chrono::milliseconds::period>>(q.value->value()).count())
+//                        << std::endl;
+//                    if (cnt >= discard && cnt < ITER - discard)
+//                        avg_time += (double)t;
+//                    cnt++;
 //                }
-//#endif
-//}
+//            }
+//        }
+//    }
 //
-//TEST(my_convolution_gpu, cldnn_vgg16_2dconv) {
-//    cldnn_vgg16_test();
+//    //assert(cnt == ITER);
+//    cnt -= 2 * discard;
+//    printf("Average clDNN Execution time is: %lf milliseconds \n", avg_time / cnt);
+//    printf("GFLOPS: %lf\n", FLOPS / (avg_time / cnt) / 1e6);
 //}
+
+void cldnn_vgg16_test() {
+    //#define CHECK_RESULTS
+    const auto& engine = get_test_engine(true);
+
+    const int batch_num = B;
+    const int output_y = OUTPUT_H_BEFORE_PADDING;
+    const int output_x = OUTPUT_W_BEFORE_PADDING;
+    const int input_f = R_CI;
+    const int output_f = CO;
+    assert(R_KW == R_KH);
+    const int filter_xy = R_KW;
+    assert(STRIDE_H == STRIDE_W);
+    const int stride = 1;
+    assert(PADDING_H == PADDING_W);
+    const int _padding = PADDING_W;
+
+    const int input_y = (output_y - 1) * stride + filter_xy - 2 * _padding;
+    const int input_x = (output_x - 1) * stride + filter_xy - 2 * _padding;
+
+    auto input_size = tensor(batch_num, input_f, input_y, input_x);
+    auto input_data = generate_random_4d<float>(batch_num, input_f, input_y, input_x, -1, 1);
+    auto input_data_bfyx = flatten_4d(format::bfyx, input_data);
+    auto input_mem = memory::allocate(engine, { data_types::f32, format::bfyx, input_size });
+    set_values(input_mem, input_data_bfyx);
+
+    auto weights_size = tensor(output_f, input_f, filter_xy, filter_xy);
+    auto weights_data = generate_random_4d<float>(output_f, input_f, filter_xy, filter_xy, -1, 1);
+    auto weights_data_bfyx = flatten_4d(format::bfyx, weights_data);
+    auto weights_mem = memory::allocate(engine, { data_types::f32, format::bfyx, weights_size });
+    set_values(weights_mem, weights_data_bfyx);
+
+    // Will be used to store reference values calculated in branches depending on bias
+    auto reference_result = VVVVF<float>(batch_num, VVVF<float>(output_f));
+
+    topology topology(
+        input_layout("input", input_mem.get_layout()),
+        data("weights", weights_mem));
+
+    for (int j = 0; j < ITER; j++) {
+        auto conv = convolution("conv" + std::to_string(j), "input", { "weights" },
+            { 1, 1, stride, stride }, { 0, 0, -_padding, -_padding });
+        topology.add(conv);
+    }
+
+    build_options options;
+    options.set_option(build_option::optimize_data(true));
+    network network(engine, topology, options);
+
+    network.set_input_data("input", input_mem);
+
+    network.execute();
+    auto executed_primitives = network.get_executed_primitives();
+    auto all_primitives = network.get_all_primitives();
+    //print_info(all_primitives, executed_primitives);
+
+    auto out_mem = network.get_output("conv0").get_memory();
+    cldnn::mem_lock<float> output_ptr(out_mem, get_test_stream());
+
+    ASSERT_EQ(out_mem.get_layout().format, format::bfyx);
+#ifdef CHECK_RESULTS
+    // Calculate reference values without bias
+    for (auto bi = 0; bi < batch_num; ++bi)
+    {
+        for (auto ofi = 0; ofi < output_f; ++ofi)
+        {
+            reference_result[bi][ofi] = reference_convolve(
+                input_data[bi], weights_data[ofi],
+                stride, stride,
+                0,                                  // bias
+                1, 1,                               // dilation
+                _padding, _padding,       // input padding
+                0, 0);
+        }
+    }
+
+    for (int bi = 0; bi < batch_num; ++bi)
+        for (int fi = 0; fi < output_f; ++fi)
+            for (int yi = 0; yi < output_y; ++yi)
+                for (int xi = 0; xi < output_x; ++xi)
+                {
+                    auto val_ref = reference_result[bi][fi][yi][xi];
+                    auto val = out_ptr[bi * output_f * output_y * output_x +
+                        fi * output_y * output_x +
+                        yi * output_x +
+                        xi];
+                    auto equal = are_equal(val_ref, val, 1e-2f);
+                    EXPECT_TRUE(equal);
+                    if (!equal)
+                    {
+                        std::cout << "At b = " << bi << ", fi = " << fi << ", xi = " << xi << ", yi = " << yi << std::endl;
+                    }
+                }
+#endif
+}
+
+TEST(my_convolution_gpu, cldnn_vgg16_2dconv) {
+    cldnn_vgg16_test();
+}
 
 
 TEST(deformable_convolution_f32_fw_gpu, basic_deformable_convolution_def_group1_2) {
