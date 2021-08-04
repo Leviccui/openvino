@@ -272,7 +272,7 @@ void dump_buffer(memory::ptr mem, std::string const& name) {
     }
 }
 
-Helper function for printing primitive ids and profiling info
+//Helper function for printing primitive ids and profiling info
 void print_info(std::map<primitive_id, primitive_id>& all_primitives, std::map<primitive_id, event>& executed_primitives)
 {
     //#include "../../../common/conv_cm_params.h"
