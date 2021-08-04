@@ -273,16 +273,33 @@ void dump_buffer(memory::ptr mem, std::string const& name) {
 }
 
 //Helper function for printing primitive ids and profiling info
-void print_info(std::map<primitive_id, primitive_id>& all_primitives, std::map<primitive_id, event>& executed_primitives)
+void print_info(std::vector<std::pair<std::string, std::vector<primitive_info>>> optimization_steps_info)
 {
-    std::vector<cldnn::instrumentation::profiling_info> profiling_table;
-    for (auto& p : executed_primitives)
+    for (auto& p : optimization_steps_info)
     {
-        std::vector<cldnn::instrumentation::profiling_interval> v = p.second.get_profiling_info();
+        std::cout << p.first << std::endl;
+        /*std::vector<cldnn::instrumentation::profiling_interval> v = p.second.get_profiling_info();
         cldnn::instrumentation::profiling_info info = { p.first, v };
-        profiling_table.push_back(info);
+        profiling_table.push_back(info);*/
     }
-    // We have table of profiling metrics.
+// We have table of profiling metrics.
+
+    //primitives_info
+    ////#include "../../../common/conv_cm_params.h"
+    //    //std::cout << std::endl << "Org_primitive_id, Primitive_id_after_optimization" << std::endl;
+    //    //for (auto& p : all_primitives)
+    //    //{
+    //    //    std::cout << p.first << ", " << p.second << std::endl;
+    //    //}
+    //    // Now, we want to check what is the time of execution of each primitive:
+    //std::vector<cldnn::instrumentation::profiling_info> profiling_table;
+    //for (auto& p : executed_primitives)
+    //{
+    //    std::vector<cldnn::instrumentation::profiling_interval> v = p.second.get_profiling_info();
+    //    cldnn::instrumentation::profiling_info info = { p.first, v };
+    //    profiling_table.push_back(info);
+    //}
+    //// We have table of profiling metrics.
 
     //for (auto& p : profiling_table)
     //{
@@ -372,9 +389,8 @@ void cldnn_vgg16_test() {
     network.set_input_data("input", input_mem);
 
     network.execute();
-    auto executed_primitives = network.get_executed_primitives();
-    auto all_primitives = network.get_all_primitives();
-    print_info(all_primitives, executed_primitives);
+    auto optimization_steps_info = network.get_optimization_steps_info();
+    print_info(optimization_steps_info);
 
     auto out_mem = network.get_output("output0").get_memory();
     auto out_layout = out_mem->get_layout();
