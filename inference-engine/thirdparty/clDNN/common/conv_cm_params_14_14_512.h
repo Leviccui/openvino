@@ -15,12 +15,12 @@
 //output
 #define OUTPUT_H_BEFORE_PADDING	14
 #define	OUTPUT_W_BEFORE_PADDING	14
-#define OUTPUT_TOTAL_H		(OUTPUT_H_BEFORE_PADDING+2*PADDING_H)
-#define OUTPUT_TOTAL_W		(OUTPUT_W_BEFORE_PADDING+2*PADDING_W)
-#define HHH					4
-#define WWW					4
-#define HH					4
-#define WW					4
+#define OUTPUT_TOTAL_H		OUTPUT_H_BEFORE_PADDING
+#define OUTPUT_TOTAL_W		OUTPUT_W_BEFORE_PADDING
+#define HHH					7
+#define WWW					7
+#define HH					2
+#define WW					2
 #define H					((((OUTPUT_TOTAL_H+HH-1)/HH)+HHH-1)/HHH)
 #define W					((((OUTPUT_TOTAL_W+WW-1)/WW)+WWW-1)/WWW)
 
