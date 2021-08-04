@@ -274,20 +274,20 @@ void dump_buffer(memory::ptr mem, std::string const& name) {
 
 void print_info(std::map<primitive_id, primitive_id>& all_primitives, std::map<primitive_id, event::ptr>& executed_primitives)
 {
-        //std::cout << std::endl << "Org_primitive_id, Primitive_id_after_optimization" << std::endl;
-        //for (auto& p : all_primitives)
-        //{
-        //    std::cout << p.first << ", " << p.second << std::endl;
-        //}
+        std::cout << std::endl << "Org_primitive_id, Primitive_id_after_optimization" << std::endl;
+        for (auto& p : all_primitives)
+        {
+            std::cout << p.first << ", " << p.second << std::endl;
+        }
         // Now, we want to check what is the time of execution of each primitive:
-    std::vector<cldnn::instrumentation::profiling_info> profiling_table;
-    for (auto& p : executed_primitives)
-    {
-        std::vector<cldnn::instrumentation::profiling_interval> v = p.second->get_profiling_info();
-        //cldnn::instrumentation::profiling_info info = { p.first, v };
-        //profiling_table.push_back(info);
-    }
-    // We have table of profiling metrics.
+    //std::vector<cldnn::instrumentation::profiling_info> profiling_table;
+    //for (auto& p : executed_primitives)
+    //{
+    //    std::vector<cldnn::instrumentation::profiling_interval> v = p.second->get_profiling_info();
+    //    cldnn::instrumentation::profiling_info info = { p.first, v };
+    //    profiling_table.push_back(info);
+    //}
+    //// We have table of profiling metrics.
 
     //for (auto& p : profiling_table)
     //{
@@ -363,12 +363,12 @@ void cldnn_vgg16_test() {
         input_layout("input", input_mem->get_layout()),
         data("weights", weights_mem));
 
-    for (int j = 0; j < ITER; j++) {
+    for (int j = 0; j < 1; j++) {
         auto conv = convolution("conv" + std::to_string(j), "input", { "weights" },
             { 1, 1, stride, stride }, { 0, 0, -_padding, -_padding });
         auto rd=reorder("output"+ std::to_string(j), "conv" + std::to_string(j), { data_types::f32,format::bfyx,{ batch_num, output_f, output_y, output_x } });
         topology.add(conv);
-        topology.add(rd);
+        //topology.add(rd);
     }
 
     cldnn::build_options options;
@@ -377,9 +377,9 @@ void cldnn_vgg16_test() {
     network.set_input_data("input", input_mem);
 
     network.execute();
-    auto executed_primitives = network.get_executed_primitives();
-    auto all_primitives = network.get_all_primitives();
-    print_info(all_primitives, executed_primitives);
+    //auto executed_primitives = network.get_executed_primitives();
+    //auto all_primitives = network.get_all_primitives();
+    //print_info(all_primitives, executed_primitives);
 
     auto out_mem = network.get_output("output0").get_memory();
     auto out_layout = out_mem->get_layout();
@@ -538,9 +538,6 @@ TEST(deformable_convolution_f32_fw_gpu, basic_deformable_convolution_def_group1_
     network.set_input_data("trans", trans);
 
     auto outputs = network.execute();
-    auto executed_primitives = network.get_executed_primitives();
-    auto all_primitives = network.get_all_primitives();
-    print_info(all_primitives, executed_primitives);
     EXPECT_EQ(outputs.size(), size_t(1));
     EXPECT_EQ(outputs.begin()->first, "conv");
 
