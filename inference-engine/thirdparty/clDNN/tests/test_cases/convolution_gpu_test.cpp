@@ -349,13 +349,13 @@ void cldnn_vgg16_test() {
     auto input_size = tensor(batch_num, input_f, input_y, input_x);
     auto input_data = generate_random_4d<float>(batch_num, input_f, input_y, input_x, -1, 1);
     auto input_data_bfyx = flatten_4d(format::bfyx, input_data);
-    auto input_mem = memory::allocate(engine, { data_types::f32, format::bfyx, input_size });
+    auto input_mem = engine.allocate_memory({ data_types::f32, format::bfyx, input_size });
     set_values(input_mem, input_data_bfyx);
 
     auto weights_size = tensor(output_f, input_f, filter_xy, filter_xy);
     auto weights_data = generate_random_4d<float>(output_f, input_f, filter_xy, filter_xy, -1, 1);
     auto weights_data_bfyx = flatten_4d(format::bfyx, weights_data);
-    auto weights_mem = memory::allocate(engine, { data_types::f32, format::bfyx, weights_size });
+    auto weights_mem = engine.allocate_memory({ data_types::f32, format::bfyx, weights_size });
     set_values(weights_mem, weights_data_bfyx);
 
     // Will be used to store reference values calculated in branches depending on bias
@@ -371,10 +371,9 @@ void cldnn_vgg16_test() {
         topology.add(conv);
     }
 
-    build_options options;
-    options.set_option(build_option::optimize_data(true));
+    cldnn::build_options options;
+    options.set_option(cldnn::build_option::optimize_data(true));
     network network(engine, topology, options);
-
     network.set_input_data("input", input_mem);
 
     network.execute();
