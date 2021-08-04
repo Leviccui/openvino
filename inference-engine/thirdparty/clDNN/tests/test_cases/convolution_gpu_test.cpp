@@ -362,7 +362,7 @@ void cldnn_vgg16_test() {
     auto reference_result = VVVVF<float>(batch_num, VVVF<float>(output_f));
 
     topology topology(
-        input_layout("input", input_mem.get_layout()),
+        input_layout("input", input_mem->get_layout()),
         data("weights", weights_mem));
 
     for (int j = 0; j < ITER; j++) {
@@ -384,7 +384,7 @@ void cldnn_vgg16_test() {
     auto out_mem = network.get_output("conv0").get_memory();
     cldnn::mem_lock<float> output_ptr(out_mem, get_test_stream());
 
-    ASSERT_EQ(out_mem.get_layout().format, format::bfyx);
+    ASSERT_EQ(out_mem->get_layout().format, format::bfyx);
 #ifdef CHECK_RESULTS
     // Calculate reference values without bias
     for (auto bi = 0; bi < batch_num; ++bi)
