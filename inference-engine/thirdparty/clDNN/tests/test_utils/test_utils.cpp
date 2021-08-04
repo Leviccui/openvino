@@ -285,7 +285,7 @@ std::vector<std::shared_ptr<test_params>> generic_test::generate_generic_test_pa
     return all_generic_params;
 }
 
-cldnn::engine_configuration get_test_engine_config(bool _enable_profiling) {
+cldnn::engine_configuration get_test_engine_config(bool _enable_profiling = false) {
     const bool enable_profiling = _enable_profiling;
     const cldnn::queue_types queue_type = cldnn::queue_types::out_of_order;
     std::string sources_dumps_dir = "";
@@ -300,7 +300,7 @@ std::shared_ptr<cldnn::engine> create_test_engine(bool enable_profiling = false)
     return cldnn::engine::create(engine_types::ocl, runtime_types::ocl, get_test_engine_config(enable_profiling));
 }
 
-cldnn::engine& get_test_engine(bool enable_profiling=false) {
+cldnn::engine& get_test_engine(bool enable_profiling) {
     static std::shared_ptr<cldnn::engine> test_engine = nullptr;
     if (!test_engine) {
         test_engine = create_test_engine(enable_profiling);
