@@ -327,6 +327,7 @@ event::ptr ocl_stream::enqueue_kernel(kernel& kernel,
         int timeuse;
         gettimeofday(&start, NULL);
         _command_queue.enqueueNDRangeKernel(kern, cl::NullRange, global, local, dep_events_ptr, set_output_event ? &ret_ev : nullptr);
+        enqueue_barrier()
         gettimeofday(&end, NULL);
         timeuse = 1000000 * (end.tv_sec - start.tv_sec) + end.tv_usec - start.tv_usec;
         printf("Kernel Exec Time: %lfms\n", static_cast<double>(timeuse / 1000));
