@@ -378,11 +378,13 @@ void cldnn_vgg16_test() {
 
 #include "time.h"
 #include<stdio.h>
-    clock_t start, finish;
-    start = clock();
+    struct timeval start, end;
+    int timeuse;
+    gettimeofday(&start, NULL);
     network.execute();
-    finish = clock();
-    printf("Kernel Exec Time: %lfms\n", (double)(finish - start) / CLOCKS_PER_SEC);
+    gettimeofday(&end, NULL);
+    timeuse = 1000000 * (end.tv_sec - start.tv_sec) + end.tv_usec - start.tv_usec;
+    printf("Kernel Exec Time: %lfms\n", (double)timeuse / 1000);
     //auto executed_primitives = network.get_executed_primitives();
     //auto all_primitives = network.get_all_primitives();
     //print_info(all_primitives, executed_primitives);
