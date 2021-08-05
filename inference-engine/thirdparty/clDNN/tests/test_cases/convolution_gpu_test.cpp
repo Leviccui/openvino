@@ -376,7 +376,14 @@ void cldnn_vgg16_test() {
     network network(engine, topology, options);
     network.set_input_data("input", input_mem);
 
+#include "time.h"
+#include<stdio.h>
+    clock_t start, finish;
+    double Total_time;
+    start = clock();
     network.execute();
+    finish = clock();
+    printf("Kernel Exec Time: %lfms\n", (double)(finish - start) / CLOCKS_PER_SEC);
     //auto executed_primitives = network.get_executed_primitives();
     //auto all_primitives = network.get_all_primitives();
     //print_info(all_primitives, executed_primitives);
