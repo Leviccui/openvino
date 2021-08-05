@@ -330,7 +330,7 @@ event::ptr ocl_stream::enqueue_kernel(kernel& kernel,
         enqueue_barrier();
         gettimeofday(&end, NULL);
         timeuse = 1000000 * (end.tv_sec - start.tv_sec) + end.tv_usec - start.tv_usec;
-        printf("Kernel Exec Time: %lfms\n", cnt,static_cast<double>(timeuse / 1000));
+        printf("Kernel Exec Time: %lfms\n", static_cast<double>(timeuse / 1000));
     } catch (cl::Error const& err) {
         throw ocl_error(err);
     }
