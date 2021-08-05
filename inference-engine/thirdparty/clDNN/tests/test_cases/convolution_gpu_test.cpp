@@ -369,7 +369,7 @@ void cldnn_vgg16_test() {
     for (int j = 0; j < 100; j++) {
         auto conv = convolution("conv" + std::to_string(j), "input", { "weights" },
             { 1, 1, stride, stride }, { 0, 0, -_padding, -_padding });
-        auto rd=reorder("output"+ std::to_string(j), "conv" + std::to_string(j), { data_types::f32,format::bfyx,{ batch_num, output_f, output_y, output_x } });
+        //auto rd=reorder("output"+ std::to_string(j), "conv" + std::to_string(j), { data_types::f32,format::bfyx,{ batch_num, output_f, output_y, output_x } });
         topology.add(conv);
         //topology.add(rd);
     }
