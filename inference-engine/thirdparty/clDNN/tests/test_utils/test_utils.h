@@ -164,8 +164,9 @@ std::vector<T> generate_random_1d(size_t a, int min, int max, int k = 8) {
     std::vector<T> v(a);
 
     for (size_t i = 0; i < a; ++i) {
-        v[i] = (T)distribution(generator);
-        v[i] /= k;
+        //v[i] = (T)distribution(generator);
+        //v[i] /= k;
+        v[i] = 1;
     }
     return v;
 }
