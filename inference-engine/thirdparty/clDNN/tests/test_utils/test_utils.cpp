@@ -301,7 +301,7 @@ std::shared_ptr<cldnn::engine> create_test_engine(bool enable_profiling) {
 }
 
 cldnn::engine& get_test_engine(bool enable_profiling) {
-    printf("get_test_engine:enable_profiling:%d\n", enable_profiling);
+    //printf("get_test_engine:enable_profiling:%d\n", enable_profiling);
     static std::shared_ptr<cldnn::engine> test_engine = nullptr;
     if (!test_engine) {
         test_engine = create_test_engine(enable_profiling);
