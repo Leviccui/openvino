@@ -333,7 +333,7 @@ event::ptr ocl_stream::enqueue_kernel(kernel& kernel,
         gettimeofday(&end, NULL);
         timeuse = static_cast<double>(1000000) * (end.tv_sec - start.tv_sec) + end.tv_usec - start.tv_usec;
         std::string kernel_name = ocl_kernel.get_kernel_id();
-        min_time = (kernel_name.find("convolution", 0) == 0 && min_time < timeuse) ? timeuse : min_time;
+        min_time = (kernel_name.find("convolution", 0) == 0 &&timeuse <min_time) ? timeuse : min_time;
         std::cout << kernel_name << " ";
         printf("%d Kernel Exec Time: %lfms, Min Time: %lf\n", cnt, (timeuse) / 1000, min_time);
         cnt++;
