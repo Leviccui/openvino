@@ -376,7 +376,7 @@ void cldnn_vgg16_test() {
     network network(engine, topology, options);
     network.set_input_data("input", input_mem);
 
-#include "time.h"
+#include <sys/time.h>
 #include<stdio.h>
     struct timeval start, end;
     int timeuse;
