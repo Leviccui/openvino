@@ -323,6 +323,7 @@ event::ptr ocl_stream::enqueue_kernel(kernel& kernel,
     bool set_output_event = sync_method == sync_methods::events || is_output;
 
     try {
+        static int cnt = 0;
         struct timeval start, end;
         int timeuse;
         gettimeofday(&start, NULL);
@@ -330,7 +331,8 @@ event::ptr ocl_stream::enqueue_kernel(kernel& kernel,
         enqueue_barrier()
         gettimeofday(&end, NULL);
         timeuse = 1000000 * (end.tv_sec - start.tv_sec) + end.tv_usec - start.tv_usec;
-        printf("Kernel Exec Time: %lfms\n", static_cast<double>(timeuse / 1000));
+        printf("%d:Kernel Exec Time: %lfms\n", cnt,static_cast<double>(timeuse / 1000));
+        cnt++;
     } catch (cl::Error const& err) {
         throw ocl_error(err);
     }
