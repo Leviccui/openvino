@@ -19,6 +19,10 @@
 #include <vector>
 #include <memory>
 
+#include<unistd.h>
+#include<sys/time.h>
+#include<stdio.h>
+
 // NOTE: Due to buggy scope transition of warnings we need to disable warning in place of use/instantation
 //       of some types (even though we already disabled them in scope of definition of these types).
 //       Moreover this warning is pretty much now only for annoyance: it is generated due to lack
@@ -319,7 +323,13 @@ event::ptr ocl_stream::enqueue_kernel(kernel& kernel,
     bool set_output_event = sync_method == sync_methods::events || is_output;
 
     try {
+        struct timeval start, end;
+        int timeuse;
+        gettimeofday(&start, NULL);
         _command_queue.enqueueNDRangeKernel(kern, cl::NullRange, global, local, dep_events_ptr, set_output_event ? &ret_ev : nullptr);
+        gettimeofday(&end, NULL);
+        timeuse = 1000000 * (end.tv_sec - start.tv_sec) + end.tv_usec - start.tv_usec;
+        printf("Kernel Exec Time: %lfms\n", (double)timeuse / 1000);
     } catch (cl::Error const& err) {
         throw ocl_error(err);
     }
