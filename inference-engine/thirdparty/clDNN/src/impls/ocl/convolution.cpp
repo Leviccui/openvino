@@ -147,6 +147,8 @@ public:
 
         kernel_selector::KernelsData best_kernels = kernel_selector.GetBestKernels(conv_params, conv_optional_params);
 
+        std::cout << best_kernels[0].kernelName << std::endl;
+
         CLDNN_ERROR_BOOL(arg.id(),
                          "Best_kernel.empty()",
                          best_kernels.empty(),
