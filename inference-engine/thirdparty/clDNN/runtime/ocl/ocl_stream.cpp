@@ -324,16 +324,21 @@ event::ptr ocl_stream::enqueue_kernel(kernel& kernel,
 
     try {
         static int cnt = 0;
+        double min_time = 1e10;
+        double timeuse;
         struct timeval start, end;
-        int timeuse;
         gettimeofday(&start, NULL);
+
         _command_queue.enqueueNDRangeKernel(kern, cl::NullRange, global, local, dep_events_ptr, set_output_event ? &ret_ev : nullptr);
+        
         cl::WaitForEvents({ret_ev});
         gettimeofday(&end, NULL);
-        timeuse = 1000000 * (end.tv_sec - start.tv_sec) + end.tv_usec - start.tv_usec;
-        std::cout << ocl_kernel.get_kernel_id() << " ";
-        printf("%d Kernel Exec Time: %lfms\n", cnt, static_cast<double>(timeuse) / 1000);
 
+        timeuse = static_cast < double>( 1000000 * (end.tv_sec - start.tv_sec) + end.tv_usec - start.tv_usec);
+        std::string kernel_name = ocl_kernel.get_kernel_id();
+        std::cout << kernel_name << " ";
+        printf("%d Kernel Exec Time: %lfms\n", cnt, (timeuse) / 1000);
+        min_time = timeuse < min_time ? timeuse : min_time;
         cnt++;
     } catch (cl::Error const& err) {
         throw ocl_error(err);
