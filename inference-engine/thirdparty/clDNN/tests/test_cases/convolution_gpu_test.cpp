@@ -379,7 +379,6 @@ void cldnn_vgg16_test() {
 #include "time.h"
 #include<stdio.h>
     clock_t start, finish;
-    double Total_time;
     start = clock();
     network.execute();
     finish = clock();
