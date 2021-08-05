@@ -344,6 +344,8 @@ void cldnn_vgg16_test() {
     assert(PADDING_H == PADDING_W);
     const int _padding = PADDING_W;
 
+    printf("Config: batch_num=%d input_f=%d output_f=%d output_y=%d output_x=%x", batch_num, input_f, output_f, output_y, output_x);
+
     const int input_y = (output_y - 1) * stride + filter_xy - 2 * _padding;
     const int input_x = (output_x - 1) * stride + filter_xy - 2 * _padding;
 
